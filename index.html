@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>VYKER</title>
+  <meta name="description" content="VYKER — a signal on the edge of the grid. Transmission sealed, awaiting frequency shift.">
+  <meta name="theme-color" content="#070709">
+  <link rel="canonical" href="https://vyker.github.io/static-vyker/">
+  <meta property="og:title" content="VYKER">
+  <meta property="og:description" content="PROTOCOL_09 // TRANSMISSION_SEALED">
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://vyker.github.io/static-vyker/">
+  <link rel="icon" type="image/svg+xml" href="assets/favicon.svg">
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin="">
+  <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Cinzel:wght@600;800;900&family=Space+Grotesk:wght@300;400;600&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="assets/css/tailwind.css">
+  <style>
+    :root {
+      --bg: #070709;
+      --accent: #d4d4d8;
+    }
+    body {
+      background-color: var(--bg);
+      color: #e4e4e7;
+      font-family: 'Share Tech Mono', monospace;
+      overflow-x: hidden;
+      user-select: none;
+    }
+    
+    /* CRT Scanline & Grain Overlay */
+    .scanlines {
+      background: linear-gradient(
+        to bottom,
+        rgba(255,255,255,0),
+        rgba(255,255,255,0) 50%,
+        rgba(0, 0, 0, 0.45) 50%,
+        rgba(0, 0, 0, 0.45)
+      );
+      background-size: 100% 4px;
+      pointer-events: none;
+    }
+    
+    .vignette {
+      background: radial-gradient(circle at center, transparent 35%, rgba(4, 4, 6, 0.92) 100%);
+      pointer-events: none;
+    }
+
+    /* Subtle 2000s cyber grid */
+    .cyber-grid {
+      background-image: 
+        linear-gradient(rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+      background-size: 40px 40px;
+    }
+
+    /* Ambient glow & glitch keyframes */
+    @keyframes pulse-subtle {
+      0%, 100% { opacity: 0.15; transform: scale(1); }
+      50% { opacity: 0.28; transform: scale(1.04); }
+    }
+    .pulse-glow {
+      animation: pulse-subtle 8s ease-in-out infinite;
+    }
+
+    @keyframes flicker {
+      0%, 19.99%, 22%, 62.99%, 64%, 64.99%, 70%, 100% {
+        opacity: 0.95;
+      }
+      20%, 21.99%, 63%, 63.99%, 65%, 69.99% {
+        opacity: 0.4;
+      }
+    }
+    .crt-flicker {
+      animation: flicker 11s infinite;
+    }
+
+    /* Emblem styling */
+    .emblem-v {
+      font-family: 'Cinzel', serif;
+      letter-spacing: -0.05em;
+      text-shadow: 0 0 15px rgba(255, 255, 255, 0.25);
+    }
+    
+    .brand-name {
+      font-family: 'Space Grotesk', sans-serif;
+      letter-spacing: 0.45em;
+    }
+
+    /* Cryptic interactive glitch on tap/hover */
+    .mystery-symbol {
+      transition: all 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+    }
+    .mystery-symbol:hover, .mystery-symbol:active {
+      filter: drop-shadow(0 0 12px rgba(255, 255, 255, 0.8));
+      transform: translateY(-2px) scale(1.08);
+      color: #ffffff;
+    }
+  </style>
+</head>
+<body class="min-h-screen w-full flex flex-col justify-between items-center relative overflow-hidden bg-[#070709] selection:bg-neutral-800 selection:text-white">
+
+  <!-- Ambient FX Layers -->
+  <div class="fixed inset-0 cyber-grid opacity-75 pointer-events-none"></div>
+  <div class="fixed inset-0 scanlines z-20"></div>
+  <div class="fixed inset-0 vignette z-10"></div>
+
+  <!-- Ambient Atmospheric Orb -->
+  <div class="fixed top-1/2 left-1/2 -translate-x-1/2 -translate-y-1/2 w-[340px] h-[340px] md:w-[600px] md:h-[600px] rounded-full bg-gradient-to-tr from-neutral-800/25 via-neutral-200/10 to-transparent blur-[90px] pulse-glow pointer-events-none z-0"></div>
+
+  <!-- Top Corner Telemetry (Early 2000s cyber console artifact) -->
+  <header class="w-full max-w-6xl mx-auto px-6 py-6 md:py-8 flex justify-between items-start text-[10px] tracking-[0.25em] text-neutral-600 uppercase z-30 crt-flicker">
+    <div class="flex items-center gap-2">
+      <span class="inline-block w-1.5 h-1.5 rounded-full bg-neutral-400 animate-ping opacity-60"></span>
+      <span class="text-neutral-500 font-mono" id="status-clock">UTC.08:04:10.93</span>
+    </div>
+    <div class="font-mono text-neutral-500 tracking-[0.3em] flex items-center gap-3">
+      <span class="">NODE//NULL</span>
+      <span class="opacity-30">|</span>
+      <span class="cursor-pointer hover:text-neutral-300 transition-colors" id="signal-dot" title="Signal lock">●</span>
+    </div>
+  </header>
+
+  <!-- Core Mystery Centerpiece -->
+  <main class="relative z-30 flex flex-col items-center justify-center my-auto px-6 text-center select-none">
+    
+    <!-- Outer framing container reminiscent of GTA V console emblem & early 2000s cyber badge -->
+    <div class="group relative cursor-pointer p-1 transition-all duration-700 ease-out" id="core-emblem"><div class="absolute -inset-16 pointer-events-none rounded-full blur-[40px] opacity-70" style="background: radial-gradient(circle, rgba(160, 185, 220, 0.12) 0%, rgba(60, 75, 105, 0.04) 50%, transparent 75%);"></div>
+      
+      <!-- Subtle rotating border indicator -->
+      <div class="absolute -inset-4 md:-inset-6 border border-neutral-800/60 rounded-sm pointer-events-none transition-all duration-500 group-hover:border-neutral-600 group-hover:scale-105"></div>
+      <div class="absolute -inset-2 md:-inset-3 border border-neutral-700/30 rounded-none pointer-events-none"></div>
+
+      <!-- Roman numeral 'V' emblem in GTA V-inspired brutalist badge aesthetic (White field with sharp black V) -->
+      <div class="relative w-28 h-28 md:w-40 md:h-40 flex items-center justify-center border border-white/20 transition-all duration-500 ease-out group-hover:shadow-[0_0_50px_rgba(200,215,240,0.18)]" style="background: linear-gradient(135deg, rgba(255, 255, 255, 0.08) 0%, rgba(200, 210, 230, 0.03) 100%); backdrop-filter: blur(14px); box-shadow: rgba(255, 255, 255, 0.04) 0px 0px 35px, rgba(255, 255, 255, 0.05) 0px 0px 25px inset, rgba(255, 255, 255, 0.15) 0px 1px 0px inset;"><div class="absolute top-0 left-0 w-1.5 h-1.5 bg-neutral-400/40"></div><div class="absolute top-0 right-0 w-1.5 h-1.5 bg-neutral-400/40"></div><div class="absolute bottom-0 left-0 w-1.5 h-1.5 bg-neutral-400/40"></div><div class="absolute bottom-0 right-0 w-1.5 h-1.5 bg-neutral-400/40"></div><span class="emblem-v text-7xl md:text-9xl font-black leading-none select-none transform translate-y-[-2px] tracking-tight" style="background: linear-gradient(180deg, #ffffff 15%, #b0b8c8 65%, #7a8292 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; filter: drop-shadow(0 0 12px rgba(210, 225, 255, 0.35));">V</span></div>
+
+      <!-- Minimal Cyber Reticle Lines -->
+      <div class="absolute -left-8 top-1/2 w-5 h-[1px] bg-neutral-700/60 hidden md:block"></div>
+      <div class="absolute -right-8 top-1/2 w-5 h-[1px] bg-neutral-700/60 hidden md:block"></div>
+      <div class="absolute top-[-24px] left-1/2 w-[1px] h-4 bg-neutral-700/60 hidden md:block"></div>
+      <div class="absolute bottom-[-24px] left-1/2 w-[1px] h-4 bg-neutral-700/60 hidden md:block"></div>
+    </div>
+
+    <!-- The Singular Brand Wordmark -->
+    <div class="mt-12 md:mt-14 relative">
+      <h1 class="brand-name text-2xl md:text-4xl text-neutral-100 font-medium uppercase tracking-[0.45em] pl-[0.45em] crt-flicker" style="color: rgb(225, 228, 234); text-shadow: rgba(225, 230, 245, 0.25) 0px 0px 16px;">
+        VYKER
+      </h1>
+      <!-- Cryptic pulse bar -->
+      <div class="w-12 h-[1px] bg-gradient-to-r from-transparent via-neutral-500 to-transparent mx-auto mt-4 opacity-50"></div>
+    </div>
+
+    <!-- Cryptic Interactive Glyph Cluster (Tapping/hovering triggers mysterious coordinates) -->
+    <div class="mt-8 flex items-center justify-center gap-6 text-neutral-600 text-xs font-mono tracking-widest" id="glyph-bar">
+      <span class="mystery-symbol cursor-pointer hover:text-white" data-code="0x7F" title="[ ? ]">⌬</span>
+      <span class="text-neutral-800">/</span>
+      <span class="mystery-symbol cursor-pointer hover:text-white" data-code="LOC::44.209" title="[ ? ]">⌖</span>
+      <span class="text-neutral-800">/</span>
+      <span class="mystery-symbol cursor-pointer hover:text-white" data-code="STATE::PENDING" title="[ ? ]">⟡</span>
+    </div>
+
+    <!-- Mysterious Dynamic Stream Output (Changes upon clicking emblem/glyphs) -->
+    <div class="h-6 mt-4">
+      <p id="cryptic-output" class="text-[11px] font-mono tracking-[0.25em] text-neutral-500 transition-opacity duration-300 opacity-60">
+        //
+      </p>
+    </div>
+
+  </main>
+
+  <!-- Footer Matrix Coordinates & Cryptic Protocol -->
+  <footer class="w-full max-w-6xl mx-auto px-6 py-6 md:py-8 flex flex-col md:flex-row justify-between items-center text-[10px] tracking-[0.25em] text-neutral-600 font-mono uppercase gap-4 z-30">
+    <div class="flex items-center gap-4">
+      <span class="text-neutral-500">INIT: 2004.09</span>
+      <span class="text-neutral-800">/</span>
+      <span class="text-neutral-600" id="hex-ticker">0x00FAEE</span>
+    </div>
+
+    <div class="tracking-[0.35em] text-neutral-600 hover:text-neutral-400 transition-colors cursor-default">
+      [ · · · ]
+    </div>
+
+    <div class="flex items-center gap-3 text-neutral-500">
+      <span class="">PROTOCOL_09</span>
+      <span class="inline-block w-1.5 h-1.5 bg-neutral-600 rounded-sm"></span>
+    </div>
+  </footer>
+
+  <script src="assets/js/main.js"></script>
+
+
+</body></html>

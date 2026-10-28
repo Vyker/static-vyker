@@ -1,0 +1,11 @@
+{
+  "name": "static-vyker",
+  "private": true,
+  "description": "VYKER holding page — served by GitHub Pages",
+  "scripts": {
+    "build": "tailwindcss -i input.css -o assets/css/tailwind.css --minify"
+  },
+  "devDependencies": {
+    "tailwindcss": "^3.4.0"
+  }
+}
